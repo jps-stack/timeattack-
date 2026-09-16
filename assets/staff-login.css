@@ -1,0 +1,188 @@
+:root {
+  color-scheme: dark;
+}
+
+body {
+  background: #000;
+  color: #fff;
+  margin: 0;
+}
+
+.staff-login-page {
+  align-items: center;
+  background: #000;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 72px 20px 36px;
+  position: relative;
+}
+
+.staff-login-back {
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.72);
+  display: inline-flex;
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  left: 24px;
+  min-height: 40px;
+  padding: 0 14px;
+  position: absolute;
+  text-decoration: none;
+  top: 24px;
+  transition: border-color 160ms ease, color 160ms ease;
+}
+
+.staff-login-back:hover,
+.staff-login-back:focus-visible {
+  border-color: rgba(255, 255, 255, 0.34);
+  color: #fff;
+}
+
+.staff-login-panel {
+  background: #0f1115;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.62);
+  box-sizing: border-box;
+  max-width: 420px;
+  padding: 32px;
+  position: relative;
+  width: 100%;
+}
+
+.staff-login-panel::before {
+  background: #e10600;
+  content: "";
+  height: 3px;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.staff-login-logo {
+  display: block;
+  height: 38px;
+  margin-bottom: 24px;
+  object-fit: contain;
+  object-position: left center;
+  width: auto;
+}
+
+.staff-login-eyebrow {
+  color: #e10600;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  margin: 0 0 8px;
+  text-transform: uppercase;
+}
+
+.staff-login-panel h1 {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 30px;
+  font-weight: 700;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.staff-login-copy {
+  color: rgba(255, 255, 255, 0.56);
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  margin: 8px 0 24px;
+}
+
+.staff-login-form {
+  display: grid;
+  gap: 10px;
+}
+
+.staff-login-form label {
+  color: rgba(255, 255, 255, 0.62);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.staff-login-form input {
+  background: #090a0d;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+  box-sizing: border-box;
+  color: #fff;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 24px;
+  min-height: 52px;
+  outline: none;
+  padding: 10px 14px;
+  width: 100%;
+}
+
+.staff-login-form input:focus {
+  border-color: #e10600;
+  box-shadow: 0 0 0 3px rgba(225, 6, 0, 0.14);
+}
+
+.staff-login-form button {
+  align-items: center;
+  background: #d62820;
+  border: 1px solid #ed3b32;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  font-family: "Inter", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 18px;
+  transition: background-color 160ms ease;
+}
+
+.staff-login-form button:hover:not(:disabled) {
+  background: #e3322a;
+}
+
+.staff-login-form button:disabled {
+  cursor: wait;
+  opacity: 0.62;
+}
+
+.staff-login-error {
+  color: #ff7770;
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  margin: 0;
+  min-height: 20px;
+}
+
+.staff-login-footer {
+  color: rgba(255, 255, 255, 0.32);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 9px;
+  margin: 28px 0 0;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+@media (max-width: 520px) {
+  .staff-login-page {
+    justify-content: flex-start;
+    padding-top: 96px;
+  }
+
+  .staff-login-back {
+    left: 16px;
+    top: 16px;
+  }
+
+  .staff-login-panel {
+    padding: 26px 22px;
+  }
+}

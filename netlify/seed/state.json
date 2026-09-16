@@ -1,0 +1,47 @@
+{
+  "config": {
+    "activeGame": "f1",
+    "trackId": "baku",
+    "awardMode": false,
+    "selectedCar": "virtual-motors",
+    "adsEnabled": true,
+    "selectedAds": [
+      "gt-lite",
+      "wheel-stand",
+      "open-wheel"
+    ],
+    "customAds": [
+      {
+        "id": "coauto-259",
+        "name": "Moza Clamp for Truck Wheel",
+        "brand": "MOZA",
+        "image": "https://media.nidux.net/pull/800/800/14627/259-product-668dc203c5ab2-clamp-for-truck-wheel-6.webp",
+        "url": "https://www.coautosim.com/products/259/moza-clamp-for-truck-wheel"
+      },
+      {
+        "id": "coauto-257",
+        "name": "Moza SGP Shifter",
+        "brand": "MOZA",
+        "image": "https://media.nidux.net/pull/800/800/14627/257-product-668dbda65a57c-moza-sgp-sequential-shifter-5.webp",
+        "url": "https://www.coautosim.com/products/257/moza-sgp-shifter"
+      }
+    ],
+    "sponsor": {
+      "fileName": "logo-nextlevel.png",
+      "needsLightBg": false,
+      "updatedAt": 1789410646625
+    },
+    "partners": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "updatedAt": 1789531488817
+  },
+  "participants": []
+}

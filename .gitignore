@@ -1,0 +1,9 @@
+.timeattack-state.json
+.timeattack-uploads/
+.recovery-original/
+.env
+.netlify/
+.pnpm-store/
+deno.lock
+dist/
+node_modules/

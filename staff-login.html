@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="es" class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <title>Acceso Staff - Virtual Motors Time Attack</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap"
+    />
+    <link rel="stylesheet" href="/assets/index-ff3VdUYH.css" />
+    <link rel="stylesheet" href="/assets/staff-login.css" />
+  </head>
+  <body>
+    <main class="staff-login-page">
+      <a class="staff-login-back" href="/">← Volver al dashboard</a>
+
+      <section class="staff-login-panel" aria-labelledby="staff-login-title">
+        <img class="staff-login-logo" src="/assets/logo-vm.png" alt="Virtual Motors" />
+        <p class="staff-login-eyebrow">Virtual Motors Time Attack</p>
+        <h1 id="staff-login-title">Acceso Staff</h1>
+        <p class="staff-login-copy">Ingresa la contraseña para administrar el evento.</p>
+
+        <form class="staff-login-form" data-staff-login-form>
+          <label for="staff-password">Contraseña</label>
+          <input
+            id="staff-password"
+            name="password"
+            type="password"
+            autocomplete="current-password"
+            maxlength="64"
+            required
+            autofocus
+          />
+          <p class="staff-login-error" data-staff-login-error role="alert" aria-live="polite"></p>
+          <button type="submit">Entrar al panel</button>
+        </form>
+      </section>
+
+      <p class="staff-login-footer">Created by VM Labs · Virtual Motors Labs</p>
+    </main>
+    <script type="module" src="/assets/staff-login.js"></script>
+  </body>
+</html>
