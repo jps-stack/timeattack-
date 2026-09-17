@@ -3,6 +3,7 @@ import { mkdir, readFile, unlink, writeFile } from "node:fs/promises";
 import { createReadStream, existsSync } from "node:fs";
 import { extname, join, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
+import { isSensitiveActionPasswordValid } from "./netlify/lib/auth.mjs";
 
 const root = fileURLToPath(new URL(".", import.meta.url));
 const port = Number(process.env.PORT || 4173);
@@ -47,7 +48,7 @@ const loginAttempts = new Map();
 let participants = [];
 const defaultConfig = {
   activeGame: "f1",
-  trackId: "miami",
+  trackId: "barcelona",
   awardMode: false,
   selectedCar: "audi",
   adsEnabled: true,
@@ -115,6 +116,12 @@ function getStaffSession(req) {
 function requireStaff(req, res) {
   if (getStaffSession(req)) return true;
   sendJson(res, 401, { error: "Staff authentication required" });
+  return false;
+}
+
+function requireSensitiveActionPassword(req, res) {
+  if (isSensitiveActionPasswordValid(req.headers["x-action-password"] || "")) return true;
+  sendJson(res, 403, { error: "Contraseña de acción incorrecta" });
   return false;
 }
 
@@ -436,6 +443,7 @@ async function handleApi(req, res, url) {
     if (req.method === "PUT") {
       if (!requireStaff(req, res)) return;
       const body = await readBody(req);
+      if (Object.hasOwn(body, "awardMode") && !requireSensitiveActionPassword(req, res)) return;
       if (body.selectedCar && !validCarIds.has(body.selectedCar)) {
         return sendJson(res, 400, { error: "Unknown car selection" });
       }
@@ -467,6 +475,7 @@ async function handleApi(req, res, url) {
 
     if (req.method === "DELETE") {
       if (!requireStaff(req, res)) return;
+      if (!requireSensitiveActionPassword(req, res)) return;
       participants = participants.filter((p) => p.status !== "finished");
       return sendJson(res, 200, { ok: true });
     }
@@ -629,6 +638,15 @@ const server = createServer(async (req, res) => {
         "x-frame-options": "DENY"
       });
       return res.end(loginHtml);
+    }
+
+    if (url.pathname === "/reglamento") {
+      const rulesHtml = await readFile(join(root, "reglamento.html"), "utf8");
+      res.writeHead(200, {
+        "cache-control": "no-store",
+        "content-type": types[".html"]
+      });
+      return res.end(rulesHtml);
     }
 
     const target = safePath(url.pathname === "/" ? "/index.html" : url.pathname);

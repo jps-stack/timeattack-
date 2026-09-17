@@ -1,7 +1,7 @@
 {
   "config": {
     "activeGame": "f1",
-    "trackId": "baku",
+    "trackId": "barcelona",
     "awardMode": false,
     "selectedCar": "virtual-motors",
     "adsEnabled": true,

@@ -1,0 +1,522 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#090a0c" />
+    <meta
+      name="description"
+      content="Reglamento oficial, asistencias, premios y condiciones del VM Time Attack en Barcelona."
+    />
+    <title>Reglamento | VM Time Attack</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&family=Rajdhani:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #090a0c;
+        --surface: #121418;
+        --surface-strong: #191c21;
+        --line: #30343b;
+        --muted: #a4aab3;
+        --text: #f7f8fa;
+        --red: #e10600;
+        --gold: #f3c64f;
+        --green: #53c28b;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        background: var(--bg);
+      }
+
+      body {
+        margin: 0;
+        min-width: 320px;
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Inter", sans-serif;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .shell {
+        width: min(1080px, calc(100% - 32px));
+        margin: 0 auto;
+      }
+
+      .site-header {
+        border-bottom: 1px solid var(--line);
+        background: #0d0f12;
+      }
+
+      .site-header__inner {
+        min-height: 76px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        min-width: 0;
+      }
+
+      .brand img {
+        width: auto;
+        height: 42px;
+        object-fit: contain;
+      }
+
+      .brand__text {
+        font-family: "Rajdhani", sans-serif;
+        font-size: 18px;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+
+      .back-link,
+      .primary-link {
+        min-height: 42px;
+        padding: 10px 16px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      .back-link:hover,
+      .back-link:focus-visible {
+        border-color: #747b86;
+      }
+
+      .primary-link {
+        border-color: var(--red);
+        background: var(--red);
+        color: #fff;
+      }
+
+      .hero {
+        padding: 64px 0 48px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .eyebrow {
+        margin: 0 0 12px;
+        color: #ff635e;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+
+      h1,
+      h2,
+      h3 {
+        font-family: "Rajdhani", sans-serif;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        max-width: 780px;
+        margin-bottom: 16px;
+        font-size: clamp(38px, 7vw, 64px);
+        line-height: 0.98;
+      }
+
+      .hero__copy {
+        max-width: 720px;
+        margin-bottom: 26px;
+        color: var(--muted);
+        font-size: 17px;
+        line-height: 1.65;
+      }
+
+      .facts {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        border: 1px solid var(--line);
+        background: var(--surface);
+      }
+
+      .fact {
+        min-width: 0;
+        padding: 18px;
+      }
+
+      .fact + .fact {
+        border-left: 1px solid var(--line);
+      }
+
+      .fact__label {
+        display: block;
+        margin-bottom: 6px;
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+
+      .fact__value {
+        font-family: "Rajdhani", sans-serif;
+        font-size: 22px;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+
+      main section {
+        padding: 50px 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .section-heading {
+        display: grid;
+        grid-template-columns: minmax(220px, 0.75fr) minmax(0, 1.6fr);
+        gap: 48px;
+        align-items: start;
+      }
+
+      h2 {
+        margin-bottom: 8px;
+        font-size: 30px;
+      }
+
+      .section-intro {
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .rules-list {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        counter-reset: rule;
+      }
+
+      .rules-list li {
+        counter-increment: rule;
+        position: relative;
+        padding: 18px 0 18px 54px;
+        border-top: 1px solid var(--line);
+        line-height: 1.6;
+      }
+
+      .rules-list li::before {
+        content: counter(rule, decimal-leading-zero);
+        position: absolute;
+        left: 0;
+        top: 19px;
+        color: #ff635e;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .assist-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .assist {
+        min-height: 74px;
+        padding: 16px;
+        border-left: 3px solid var(--green);
+        background: var(--surface);
+      }
+
+      .assist span {
+        display: block;
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+
+      .assist strong {
+        display: block;
+        margin-top: 7px;
+        font-size: 15px;
+      }
+
+      .prizes {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .prize {
+        padding: 20px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface);
+      }
+
+      .prize:first-child {
+        border-color: var(--gold);
+      }
+
+      .prize__place {
+        margin-bottom: 18px;
+        color: var(--gold);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+
+      .prize h3 {
+        margin-bottom: 10px;
+        font-size: 24px;
+      }
+
+      .prize p {
+        margin-bottom: 0;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      .extras {
+        margin-top: 14px;
+        padding: 20px;
+        border-left: 3px solid var(--red);
+        background: var(--surface-strong);
+      }
+
+      .extras strong {
+        color: #fff;
+      }
+
+      .extras p {
+        margin-bottom: 0;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .page-footer {
+        padding: 36px 0 48px;
+      }
+
+      .page-footer__inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+      }
+
+      .page-footer p {
+        margin-bottom: 0;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .actions {
+        display: flex;
+        gap: 10px;
+      }
+
+      @media (max-width: 760px) {
+        .shell {
+          width: min(100% - 24px, 1080px);
+        }
+
+        .brand__text {
+          display: none;
+        }
+
+        .hero {
+          padding: 44px 0 36px;
+        }
+
+        .facts,
+        .section-heading,
+        .assist-grid,
+        .prizes {
+          grid-template-columns: 1fr;
+        }
+
+        .fact + .fact {
+          border-top: 1px solid var(--line);
+          border-left: 0;
+        }
+
+        .section-heading {
+          gap: 24px;
+        }
+
+        main section {
+          padding: 38px 0;
+        }
+
+        .page-footer__inner,
+        .actions {
+          align-items: stretch;
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="shell site-header__inner">
+        <div class="brand">
+          <img src="/assets/logo-vm.png" alt="Virtual Motors" />
+          <span class="brand__text">VM Time Attack</span>
+        </div>
+        <a class="back-link" href="/">Volver al dashboard</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="shell">
+          <p class="eyebrow">Reglamento oficial</p>
+          <h1>VM Time Attack Barcelona</h1>
+          <p class="hero__copy">
+            Consulta las condiciones de participación, las asistencias autorizadas y los premios
+            antes de ingresar a la fila virtual.
+          </p>
+          <div class="facts" aria-label="Datos principales del evento">
+            <div class="fact">
+              <span class="fact__label">Circuito</span>
+              <span class="fact__value">Barcelona</span>
+            </div>
+            <div class="fact">
+              <span class="fact__label">Formato</span>
+              <span class="fact__value">3 vueltas</span>
+            </div>
+            <div class="fact">
+              <span class="fact__label">Edad mínima</span>
+              <span class="fact__value">8 años</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="shell section-heading">
+          <div>
+            <p class="eyebrow">Competencia</p>
+            <h2>Reglas de participación</h2>
+            <p class="section-intro">El resultado se define únicamente con vueltas válidas.</p>
+          </div>
+          <ol class="rules-list">
+            <li>
+              Cada persona tiene una sola participación. El intento consta de tres vueltas y no
+              se permite repetir el Time Attack.
+            </li>
+            <li>La mejor vuelta válida de las tres será el tiempo oficial del participante.</li>
+            <li>
+              Una vuelta incompleta o invalidada por el simulador no puede ser tomada en cuenta.
+            </li>
+            <li>
+              Si el simulador presenta una falla por circunstancias fuera del control de la
+              organización, se conservará la mejor vuelta válida completada hasta ese momento.
+            </li>
+            <li>Las diez mejores posiciones recibirán un llavero de Virtual Motors.</li>
+          </ol>
+        </div>
+      </section>
+
+      <section>
+        <div class="shell section-heading">
+          <div>
+            <p class="eyebrow">Configuración</p>
+            <h2>Asistencias habilitadas</h2>
+            <p class="section-intro">
+              Todos los participantes compiten bajo la misma configuración.
+            </p>
+          </div>
+          <div class="assist-grid">
+            <div class="assist">
+              <span>Trazada</span>
+              <strong>Visible en curvas</strong>
+            </div>
+            <div class="assist">
+              <span>Frenado</span>
+              <strong>Freno antibloqueo activado</strong>
+            </div>
+            <div class="assist">
+              <span>Tracción</span>
+              <strong>Control de tracción bajo</strong>
+            </div>
+            <div class="assist">
+              <span>Seguridad</span>
+              <strong>Force Feedback desactivado</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="shell">
+          <div class="section-heading" style="margin-bottom: 26px">
+            <div>
+              <p class="eyebrow">Podio</p>
+              <h2>Premios</h2>
+            </div>
+            <p class="section-intro">
+              Los tres mejores tiempos válidos reciben premios de VM Lounge y VM Academy.
+            </p>
+          </div>
+          <div class="prizes">
+            <article class="prize">
+              <p class="prize__place">Primer lugar</p>
+              <h3>US$200</h3>
+              <p>Más 10 horas de academia.</p>
+            </article>
+            <article class="prize">
+              <p class="prize__place">Segundo lugar</p>
+              <h3>Mouse y teclado</h3>
+              <p>Equipo de VM Lounge más 5 horas de academia.</p>
+            </article>
+            <article class="prize">
+              <p class="prize__place">Tercer lugar</p>
+              <h3>Merch VM Lounge</h3>
+              <p>Productos de VM Lounge más 2 horas de academia.</p>
+            </article>
+          </div>
+          <div class="extras">
+            <p>
+              <strong>Rifa para participantes:</strong> se rifarán 10 horas de academia entre
+              todas las personas que participen en el evento.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="page-footer">
+      <div class="shell page-footer__inner">
+        <p>VM Time Attack · Virtual Motors</p>
+        <div class="actions">
+          <a class="back-link" href="/">Dashboard</a>
+          <a class="primary-link" href="/registro">Inscribirme</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

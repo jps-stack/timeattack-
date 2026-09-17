@@ -28,15 +28,20 @@
   force = true
 
 [[redirects]]
-  from = "/admin/*"
-  to = "/.netlify/functions/admin"
-  status = 200
-  force = true
+from = "/admin/*"
+to = "/.netlify/functions/admin"
+status = 200
+force = true
 
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+from = "/reglamento"
+to = "/reglamento.html"
+status = 200
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
 
 [[headers]]
   for = "/*"

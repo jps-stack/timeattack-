@@ -4,6 +4,7 @@ import {
   createStaffSessionToken,
   getClientKey,
   getStaffSession,
+  isSensitiveActionPasswordValid,
   isStaffPasswordValid
 } from "../lib/auth.mjs";
 import {
@@ -60,6 +61,13 @@ function apiPath(url) {
 function requireStaff(request) {
   if (getStaffSession(request)) return null;
   return json({ error: "Se requiere autenticación de Staff" }, 401);
+}
+
+function requireSensitiveActionPassword(request) {
+  if (isSensitiveActionPasswordValid(request.headers.get("x-action-password") || "")) {
+    return null;
+  }
+  return json({ error: "Contraseña de acción incorrecta" }, 403);
 }
 
 function participantList(state) {
@@ -121,7 +129,12 @@ async function handleConfig(request) {
 
   const unauthorized = requireStaff(request);
   if (unauthorized) return unauthorized;
-  const update = validateConfigUpdate(await readJson(request));
+  const body = await readJson(request);
+  if (Object.hasOwn(body, "awardMode")) {
+    const forbidden = requireSensitiveActionPassword(request);
+    if (forbidden) return forbidden;
+  }
+  const update = validateConfigUpdate(body);
   const state = await updateState((current) => ({
     ...current,
     config: { ...current.config, ...update, updatedAt: Date.now() }
@@ -143,6 +156,8 @@ async function handleParticipants(request, path) {
     if (request.method === "DELETE") {
       const unauthorized = requireStaff(request);
       if (unauthorized) return unauthorized;
+      const forbidden = requireSensitiveActionPassword(request);
+      if (forbidden) return forbidden;
       await updateState((state) => ({
         ...state,
         participants: participantList(state).filter((participant) => participant.status !== "finished")
