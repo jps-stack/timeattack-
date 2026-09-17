@@ -2,6 +2,7 @@ export const PARTNER_COUNT = 8;
 export const LOGO_UPLOAD_LIMIT_BYTES = 5 * 1024 * 1024;
 export const PRODUCT_PAGE_LIMIT_BYTES = 2 * 1024 * 1024;
 export const CUSTOM_AD_LIMIT = 12;
+export const VALID_CONTACT_TYPES = new Set(["whatsapp", "instagram", "facebook"]);
 
 export const VALID_LOGO_SLOTS = new Set([
   "sponsor",
@@ -36,12 +37,22 @@ export function createHttpError(statusCode, message) {
 export function publicParticipant(participant) {
   const {
     contact: _contact,
+    contactType: _contactType,
     hasContact: _hasContact,
     isMember: _isMember,
     memberNumber: _memberNumber,
     ...visibleParticipant
   } = participant;
   return visibleParticipant;
+}
+
+export function normalizeContactType(value, hasContact) {
+  if (!hasContact) return "";
+  const contactType = String(value || "").trim().toLowerCase();
+  if (!VALID_CONTACT_TYPES.has(contactType)) {
+    throw createHttpError(400, "Selecciona WhatsApp, Instagram o Facebook como medio de contacto");
+  }
+  return contactType;
 }
 
 export function parseTimeMs(value) {

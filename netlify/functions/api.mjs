@@ -25,6 +25,7 @@ import {
   getLogoMeta,
   getLogoSlot,
   isPng,
+  normalizeContactType,
   parseTimeMs,
   publicParticipant,
   validateConfigUpdate
@@ -164,6 +165,11 @@ async function handleParticipants(request, path) {
       const isStaff = Boolean(getStaffSession(request));
       const timeMs = isStaff ? parseTimeMs(body.time) : null;
       const now = Date.now();
+      const hasContact = Boolean(body.hasContact);
+      const contact = hasContact ? cleanText(body.contact, 180) : "";
+      if (hasContact && !contact) {
+        throw createHttpError(400, "Ingresa el usuario o número de contacto");
+      }
       const participant = {
         id: crypto.randomUUID(),
         firstName: cleanText(body.firstName, 80),
@@ -172,8 +178,9 @@ async function handleParticipants(request, path) {
         team: cleanText(body.team, 100),
         isMember: Boolean(body.isMember),
         memberNumber: cleanText(body.memberNumber, 80),
-        hasContact: Boolean(body.hasContact),
-        contact: cleanText(body.contact, 180),
+        hasContact,
+        contactType: normalizeContactType(body.contactType, hasContact),
+        contact,
         source: isStaff ? cleanText(body.source, 20) || "staff" : "public",
         status: timeMs === null ? "queued" : "finished",
         queuedAt: now,
@@ -216,6 +223,11 @@ async function handleParticipants(request, path) {
         const timeMs = parseTimeMs(body.time);
         const firstName = cleanText(body.firstName ?? participant.firstName, 80);
         const lastName = cleanText(body.lastName ?? participant.lastName, 80);
+        const hasContact = Boolean(body.hasContact);
+        const contact = hasContact ? cleanText(body.contact, 180) : "";
+        if (hasContact && !contact) {
+          throw createHttpError(400, "Ingresa el usuario o número de contacto");
+        }
         return {
           ...participant,
           firstName,
@@ -224,8 +236,9 @@ async function handleParticipants(request, path) {
           team: cleanText(body.team ?? participant.team, 100),
           isMember: Boolean(body.isMember),
           memberNumber: cleanText(body.memberNumber, 80),
-          hasContact: Boolean(body.hasContact),
-          contact: cleanText(body.contact, 180),
+          hasContact,
+          contactType: normalizeContactType(body.contactType, hasContact),
+          contact,
           timeMs,
           status: timeMs === null ? participant.status : "finished",
           updatedAt

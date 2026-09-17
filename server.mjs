@@ -34,6 +34,7 @@ const validAdIds = new Set([
   "open-wheel",
   "monitor-mount"
 ]);
+const validContactTypes = new Set(["whatsapp", "instagram", "facebook"]);
 const staffPassword = process.env.STAFF_PASSWORD;
 if (!staffPassword) {
   throw new Error("Falta configurar STAFF_PASSWORD para iniciar el servidor local");
@@ -143,12 +144,22 @@ function createStaffCookie(req, token, maxAgeSeconds) {
 function publicParticipant(participant) {
   const {
     contact: _contact,
+    contactType: _contactType,
     hasContact: _hasContact,
     isMember: _isMember,
     memberNumber: _memberNumber,
     ...visibleParticipant
   } = participant;
   return visibleParticipant;
+}
+
+function normalizeContactType(value, hasContact) {
+  if (!hasContact) return "";
+  const contactType = String(value || "").trim().toLowerCase();
+  if (!validContactTypes.has(contactType)) {
+    throw createHttpError(400, "Selecciona WhatsApp, Instagram o Facebook como medio de contacto");
+  }
+  return contactType;
 }
 
 async function readBody(req) {
@@ -469,6 +480,12 @@ async function handleApi(req, res, url) {
       }
       const isStaff = Boolean(getStaffSession(req));
       const timeMs = isStaff ? parseTimeMs(body.time) : null;
+      const hasContact = Boolean(body.hasContact);
+      const contact = hasContact ? String(body.contact || "").trim().slice(0, 180) : "";
+      if (hasContact && !contact) {
+        throw createHttpError(400, "Ingresa el usuario o número de contacto");
+      }
+      const now = Date.now();
       const participant = {
         id: crypto.randomUUID(),
         firstName: body.firstName || "",
@@ -477,11 +494,14 @@ async function handleApi(req, res, url) {
         team: body.team || "",
         isMember: Boolean(body.isMember),
         memberNumber: body.memberNumber || "",
-        hasContact: Boolean(body.hasContact),
-        contact: body.contact || "",
+        hasContact,
+        contactType: normalizeContactType(body.contactType, hasContact),
+        contact,
         source: isStaff ? body.source || "staff" : "public",
         status: timeMs === null ? "queued" : "finished",
-        queuedAt: Date.now(),
+        queuedAt: now,
+        createdAt: now,
+        updatedAt: now,
         timeMs
       };
       participants.push(participant);
@@ -503,10 +523,24 @@ async function handleApi(req, res, url) {
       const body = await readBody(req);
       participants = participants.map((p) => {
         if (p.id !== id) return p;
-        if (body.action === "call") return { ...p, status: "called" };
-        if (body.action === "requeue") return { ...p, status: "queued" };
+        if (body.action === "call") return { ...p, status: "called", updatedAt: Date.now() };
+        if (body.action === "requeue") return { ...p, status: "queued", updatedAt: Date.now() };
         const timeMs = parseTimeMs(body.time);
-        return { ...p, ...body, timeMs, status: timeMs === null ? p.status : "finished" };
+        const hasContact = Boolean(body.hasContact);
+        const contact = hasContact ? String(body.contact || "").trim().slice(0, 180) : "";
+        if (hasContact && !contact) {
+          throw createHttpError(400, "Ingresa el usuario o número de contacto");
+        }
+        return {
+          ...p,
+          ...body,
+          hasContact,
+          contactType: normalizeContactType(body.contactType, hasContact),
+          contact,
+          timeMs,
+          status: timeMs === null ? p.status : "finished",
+          updatedAt: Date.now()
+        };
       });
       return sendJson(res, 200, { ok: true });
     }
