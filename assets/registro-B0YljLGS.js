@@ -322,6 +322,38 @@ function Registration() {
               })
         ]
       }),
+      jsx.jsxs("div", {
+        className: "w-full mt-5 grid gap-2",
+        style: { maxWidth: 480 },
+        children: [
+          jsx.jsx("p", {
+            className: "tag text-white/50 text-center",
+            style: { fontSize: 10 },
+            children: "Seguinos en redes"
+          }),
+          jsx.jsxs("div", {
+            className: "grid grid-cols-2 gap-2",
+            children: [
+              jsx.jsx("a", {
+                href: "https://www.instagram.com/virtualmotors_esports/",
+                target: "_blank",
+                rel: "noopener noreferrer",
+                className: "btn-ghost",
+                style: { justifyContent: "center", textAlign: "center" },
+                children: "Seguir en Instagram"
+              }),
+              jsx.jsx("a", {
+                href: "https://www.facebook.com/VirtualMotorsEsports",
+                target: "_blank",
+                rel: "noopener noreferrer",
+                className: "btn-ghost",
+                style: { justifyContent: "center", textAlign: "center" },
+                children: "Me gusta en Facebook"
+              })
+            ]
+          })
+        ]
+      }),
       jsx.jsx("p", {
         className: "tag text-white/40 mt-10",
         style: { letterSpacing: "0.32em", fontSize: 10 },
