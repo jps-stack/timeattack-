@@ -122,6 +122,24 @@ export function transitionParticipantStatus(participant, action, now = Date.now(
     };
   }
 
+  if (action === "return-to-virtual") {
+    if (participant.status !== "present" && participant.status !== "called") {
+      throw createHttpError(409, "Solo se puede sacar a un piloto de la fila presencial");
+    }
+    const {
+      checkedInAt: _checkedInAt,
+      calledAt: _calledAt,
+      invitedAt: _invitedAt,
+      ...virtualParticipant
+    } = participant;
+    return {
+      ...virtualParticipant,
+      status: "queued",
+      queuedAt: now,
+      updatedAt: now
+    };
+  }
+
   return null;
 }
 

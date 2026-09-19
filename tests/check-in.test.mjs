@@ -72,21 +72,41 @@ test("llamar y devolver a la fila conserva el orden del check-in", () => {
   assert.equal(returned.checkedInAt, 12_345);
 });
 
-test("Staff y dashboard separan llamado virtual y llamado a pista en v10", async () => {
+test("sacar a un piloto de la fila presencial lo envía al final de la virtual", () => {
+  const present = { ...queuedPilot, status: "present", checkedInAt: 12_345 };
+  const returned = transitionParticipantStatus(present, "return-to-virtual", 50_000);
+
+  assert.equal(returned.status, "queued");
+  assert.equal(returned.queuedAt, 50_000);
+  assert.equal(returned.updatedAt, 50_000);
+  assert.equal(returned.checkedInAt, undefined);
+  assert.equal(returned.calledAt, undefined);
+});
+
+test("no se puede sacar de la fila presencial a quien sigue en la virtual", () => {
+  assert.throws(
+    () => transitionParticipantStatus(queuedPilot, "return-to-virtual", 50_000),
+    (error) => error.statusCode === 409 && /fila presencial/.test(error.message)
+  );
+});
+
+test("Staff y dashboard separan llamado virtual y llamado a pista en v11", async () => {
   const [html, admin, dashboard, dataHook] = await Promise.all([
     readFile(new URL("index.html", root), "utf8"),
-    readFile(new URL("assets/admin-ta-v10.js", root), "utf8"),
-    readFile(new URL("assets/dashboard-ta-v10.js", root), "utf8"),
-    readFile(new URL("assets/logos-ta-v10.js", root), "utf8")
+    readFile(new URL("assets/admin-ta-v11.js", root), "utf8"),
+    readFile(new URL("assets/dashboard-ta-v11.js", root), "utf8"),
+    readFile(new URL("assets/logos-ta-v11.js", root), "utf8")
   ]);
 
-  assert.ok(html.includes("/assets/index-ta-v10.js"));
+  assert.ok(html.includes("/assets/index-ta-v11.js"));
   assert.ok(admin.includes("Ya está aquí"));
   assert.ok(admin.includes("Llamar a pista"));
+  assert.ok(admin.includes("Volver a fila virtual"));
   assert.ok(admin.includes("Cancelar llamado"));
   assert.ok(admin.includes('action:"invite"'));
   assert.ok(admin.includes('action:"uninvite"'));
   assert.ok(admin.includes('action:"check-in"'));
+  assert.ok(admin.includes('action:"return-to-virtual"'));
   assert.ok(admin.includes("Check-in · "));
   assert.ok(dashboard.includes('function re({present:t,called:s})'));
   assert.ok(dashboard.includes('const a=[...s?[s]:[],...t.slice(0,5)]'));
