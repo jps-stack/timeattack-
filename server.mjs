@@ -4,6 +4,7 @@ import { createReadStream, existsSync } from "node:fs";
 import { extname, join, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
 import { isSensitiveActionPasswordValid } from "./netlify/lib/auth.mjs";
+import { transitionParticipantStatus } from "./netlify/lib/domain.mjs";
 
 const root = fileURLToPath(new URL(".", import.meta.url));
 const port = Number(process.env.PORT || 4173);
@@ -532,8 +533,8 @@ async function handleApi(req, res, url) {
       const body = await readBody(req);
       participants = participants.map((p) => {
         if (p.id !== id) return p;
-        if (body.action === "call") return { ...p, status: "called", updatedAt: Date.now() };
-        if (body.action === "requeue") return { ...p, status: "queued", updatedAt: Date.now() };
+        const statusTransition = transitionParticipantStatus(p, body.action);
+        if (statusTransition) return statusTransition;
         const timeMs = parseTimeMs(body.time);
         const hasContact = Boolean(body.hasContact);
         const contact = hasContact ? String(body.contact || "").trim().slice(0, 180) : "";

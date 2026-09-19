@@ -90,3 +90,33 @@ test("el respaldo conserva el nuevo campo y usa la versión 2", () => {
   assert.equal(backup.participants[0].contactType, "facebook");
   assert.match(JSON.stringify(backup, null, 2), /\n  "participants"/);
 });
+
+test("el CSV incluye el check-in presencial con segundos y estado presente", () => {
+  const checkedInAt = new Date(2026, 8, 19, 14, 7, 9).getTime();
+  const csv = buildParticipantsCsv(
+    [
+      {
+        id: "p-present",
+        firstName: "Luis",
+        lastName: "Mora",
+        team: "VM",
+        status: "present",
+        timeMs: null,
+        checkedInAt,
+        queuedAt: checkedInAt - 60_000,
+        createdAt: checkedInAt - 60_000,
+        updatedAt: checkedInAt,
+        isMember: false,
+        hasContact: false,
+        source: "public"
+      }
+    ],
+    { trackName: "Barcelona", gameName: "F1" }
+  );
+
+  const [header, row] = csv.replace(/^\uFEFF/, "").split("\r\n");
+  assert.match(header, /Fecha\/hora de check-in presencial/);
+  assert.match(row, /Presente \/ Check-in realizado/);
+  assert.match(row, /2026-09-19 14:07:09/);
+  assert.equal(parseCsvRow(header).length, parseCsvRow(row).length);
+});

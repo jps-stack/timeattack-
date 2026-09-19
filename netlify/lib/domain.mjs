@@ -62,6 +62,45 @@ export function parseTimeMs(value) {
   return Number(match[1]) * 60000 + Number(match[2]) * 1000 + Number(match[3]);
 }
 
+export function transitionParticipantStatus(participant, action, now = Date.now()) {
+  if (action === "check-in") {
+    if (participant.status === "present" || participant.status === "called") return participant;
+    if (participant.status !== "queued") {
+      throw createHttpError(409, "Solo se puede registrar la llegada de un piloto en la fila virtual");
+    }
+    return {
+      ...participant,
+      status: "present",
+      checkedInAt: now,
+      updatedAt: now
+    };
+  }
+
+  if (action === "call") {
+    if (participant.status !== "present") {
+      throw createHttpError(409, "El piloto debe hacer check-in antes de ser llamado");
+    }
+    return {
+      ...participant,
+      status: "called",
+      calledAt: now,
+      updatedAt: now
+    };
+  }
+
+  if (action === "requeue") {
+    if (participant.status !== "called") return participant;
+    return {
+      ...participant,
+      status: "present",
+      checkedInAt: participant.checkedInAt ?? participant.calledAt ?? now,
+      updatedAt: now
+    };
+  }
+
+  return null;
+}
+
 export function getLogoSlot(pathname) {
   const match = pathname.match(/^\/api\/logos\/([^/]+)$/);
   if (!match) return null;

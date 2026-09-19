@@ -29,6 +29,7 @@ import {
   normalizeContactType,
   parseTimeMs,
   publicParticipant,
+  transitionParticipantStatus,
   validateConfigUpdate
 } from "../lib/domain.mjs";
 
@@ -233,8 +234,8 @@ async function handleParticipants(request, path) {
       participants: participantList(state).map((participant) => {
         if (participant.id !== id) return participant;
         const updatedAt = Date.now();
-        if (body.action === "call") return { ...participant, status: "called", updatedAt };
-        if (body.action === "requeue") return { ...participant, status: "queued", updatedAt };
+        const statusTransition = transitionParticipantStatus(participant, body.action, updatedAt);
+        if (statusTransition) return statusTransition;
         const timeMs = parseTimeMs(body.time);
         const firstName = cleanText(body.firstName ?? participant.firstName, 80);
         const lastName = cleanText(body.lastName ?? participant.lastName, 80);
