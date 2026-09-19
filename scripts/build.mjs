@@ -18,7 +18,7 @@ if (
   !html.includes("/assets/car-selector.css") ||
   !html.includes("/assets/car-selector.js") ||
   !html.includes("/assets/staff-session-guard-v1.js") ||
-  !html.includes("/assets/index-ta-v8.js")
+  !html.includes("/assets/index-ta-v10.js")
 ) {
   throw new Error("index.html no incluye las mejoras visuales de VM Time Attack");
 }

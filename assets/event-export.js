@@ -32,6 +32,7 @@ function participantStatus(participant) {
   }
   if (participant.status === "called") return "Llamado a pista";
   if (participant.status === "present") return "Presente / Check-in realizado";
+  if (participant.status === "invited") return "Llamado desde fila virtual";
   return "Pendiente / En fila";
 }
 
@@ -49,6 +50,7 @@ export function buildEventBackup({ config, participants, logos, generatedAt, gam
     total: participants.length,
     finished: participants.filter((participant) => participant.status === "finished").length,
     queued: participants.filter((participant) => participant.status === "queued").length,
+    invited: participants.filter((participant) => participant.status === "invited").length,
     present: participants.filter((participant) => participant.status === "present").length,
     called: participants.filter((participant) => participant.status === "called").length,
     public: participants.filter((participant) => participant.source === "public").length,
@@ -85,6 +87,7 @@ const PARTICIPANT_COLUMNS = [
   "Contacto",
   "Fuente de inscripción",
   "Fecha/hora de inscripción",
+  "Fecha/hora de llamado virtual",
   "Fecha/hora de check-in presencial",
   "Fecha/hora de tiempo registrado",
   "Pista",
@@ -112,7 +115,9 @@ export function buildParticipantsCsv(participants, event) {
     if (positions.has(participant.id)) return positions.get(participant.id);
     if (participant.status === "called") return 100000;
     if (participant.status === "present") return 200000 + (participant.checkedInAt ?? participant.queuedAt ?? 0) / 1e13;
-    if (participant.status === "queued") return 300000 + (participant.queuedAt ?? 0) / 1e13;
+    if (participant.status === "queued" || participant.status === "invited") {
+      return 300000 + (participant.queuedAt ?? 0) / 1e13;
+    }
     return 400000;
   };
 
@@ -132,6 +137,7 @@ export function buildParticipantsCsv(participants, event) {
       participant.hasContact ? participant.contact : "",
       participantSource(participant),
       formatDateTime(participant.createdAt),
+      formatDateTime(participant.invitedAt),
       formatDateTime(participant.checkedInAt),
       participant.status === "finished" ? formatDateTime(participant.updatedAt) : "",
       event.trackName,

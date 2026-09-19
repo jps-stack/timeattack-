@@ -120,3 +120,33 @@ test("el CSV incluye el check-in presencial con segundos y estado presente", () 
   assert.match(row, /2026-09-19 14:07:09/);
   assert.equal(parseCsvRow(header).length, parseCsvRow(row).length);
 });
+
+test("el CSV distingue el llamado virtual del llamado a pista", () => {
+  const invitedAt = new Date(2026, 8, 19, 15, 8, 4).getTime();
+  const csv = buildParticipantsCsv(
+    [
+      {
+        id: "p-invited",
+        firstName: "Ana",
+        lastName: "Rojas",
+        team: "VM",
+        status: "invited",
+        timeMs: null,
+        invitedAt,
+        queuedAt: invitedAt - 120_000,
+        createdAt: invitedAt - 120_000,
+        updatedAt: invitedAt,
+        isMember: false,
+        hasContact: false,
+        source: "public"
+      }
+    ],
+    { trackName: "Barcelona", gameName: "F1" }
+  );
+
+  const [header, row] = csv.replace(/^\uFEFF/, "").split("\r\n");
+  assert.match(header, /Fecha\/hora de llamado virtual/);
+  assert.match(row, /Llamado desde fila virtual/);
+  assert.match(row, /2026-09-19 15:08:04/);
+  assert.equal(parseCsvRow(header).length, parseCsvRow(row).length);
+});

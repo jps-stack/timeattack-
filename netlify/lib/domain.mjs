@@ -63,13 +63,37 @@ export function parseTimeMs(value) {
 }
 
 export function transitionParticipantStatus(participant, action, now = Date.now()) {
-  if (action === "check-in") {
-    if (participant.status === "present" || participant.status === "called") return participant;
+  if (action === "invite") {
+    if (participant.status === "invited") return participant;
     if (participant.status !== "queued") {
-      throw createHttpError(409, "Solo se puede registrar la llegada de un piloto en la fila virtual");
+      throw createHttpError(409, "Solo se puede llamar a un piloto de la fila virtual");
     }
     return {
       ...participant,
+      status: "invited",
+      invitedAt: now,
+      updatedAt: now
+    };
+  }
+
+  if (action === "uninvite") {
+    if (participant.status !== "invited") return participant;
+    const { invitedAt: _invitedAt, ...queuedParticipant } = participant;
+    return {
+      ...queuedParticipant,
+      status: "queued",
+      updatedAt: now
+    };
+  }
+
+  if (action === "check-in") {
+    if (participant.status === "present" || participant.status === "called") return participant;
+    if (participant.status !== "queued" && participant.status !== "invited") {
+      throw createHttpError(409, "Solo se puede registrar la llegada de un piloto en la fila virtual");
+    }
+    const { invitedAt: _invitedAt, ...presentParticipant } = participant;
+    return {
+      ...presentParticipant,
       status: "present",
       checkedInAt: now,
       updatedAt: now
