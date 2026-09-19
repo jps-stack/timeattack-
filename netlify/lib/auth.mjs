@@ -1,7 +1,7 @@
 import { createHash, createHmac, timingSafeEqual } from "node:crypto";
 
 export const STAFF_COOKIE_NAME = "ta_staff_session";
-export const STAFF_SESSION_LIFETIME_MS = 8 * 60 * 60 * 1000;
+export const STAFF_SESSION_LIFETIME_MS = 24 * 60 * 60 * 1000;
 const DEFAULT_SENSITIVE_ACTION_PASSWORD_DIGEST =
   "25620770d4d24ce08151d6447dac5e43d577633c1e0d53be6e91acb7cb67a1b7";
 
