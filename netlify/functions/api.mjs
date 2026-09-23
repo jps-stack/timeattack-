@@ -32,6 +32,7 @@ import {
   transitionParticipantStatus,
   validateConfigUpdate
 } from "../lib/domain.mjs";
+import { getDailyRank } from "../../assets/daily-ranking.js";
 
 function json(body, status = 200, headers = {}) {
   return new Response(JSON.stringify(body), {
@@ -204,10 +205,19 @@ async function handleParticipants(request, path) {
         updatedAt: now,
         timeMs
       };
-      await updateState((state) => ({
+      const state = await updateState((state) => ({
         ...state,
         participants: [...participantList(state), participant]
       }));
+      if (isStaff && timeMs !== null) {
+        const daily = getDailyRank(participantList(state), participant.id, now);
+        return json({
+          ...participant,
+          dailyRank: daily.rank,
+          inDailyTopTen: daily.inTopTen,
+          dailyTimesCount: daily.total
+        });
+      }
       return json(isStaff ? participant : publicParticipant(participant));
     }
     return json({ error: "Método no permitido" }, 405);
@@ -229,11 +239,11 @@ async function handleParticipants(request, path) {
 
   if (request.method === "PUT") {
     const body = await readJson(request);
-    await updateState((state) => ({
+    const updatedAt = Date.now();
+    const state = await updateState((state) => ({
       ...state,
       participants: participantList(state).map((participant) => {
         if (participant.id !== id) return participant;
-        const updatedAt = Date.now();
         const statusTransition = transitionParticipantStatus(participant, body.action, updatedAt);
         if (statusTransition) return statusTransition;
         const timeMs = parseTimeMs(body.time);
@@ -261,6 +271,16 @@ async function handleParticipants(request, path) {
         };
       })
     }));
+    const timeMs = parseTimeMs(body.time);
+    if (timeMs !== null) {
+      const daily = getDailyRank(participantList(state), id, updatedAt);
+      return json({
+        ok: true,
+        dailyRank: daily.rank,
+        inDailyTopTen: daily.inTopTen,
+        dailyTimesCount: daily.total
+      });
+    }
     return json({ ok: true });
   }
   return json({ error: "Método no permitido" }, 405);

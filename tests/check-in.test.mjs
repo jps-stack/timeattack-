@@ -90,15 +90,15 @@ test("no se puede sacar de la fila presencial a quien sigue en la virtual", () =
   );
 });
 
-test("Staff y dashboard separan llamado virtual y llamado a pista en v11", async () => {
+test("Staff y dashboard separan llamado virtual y llamado a pista en v12", async () => {
   const [html, admin, dashboard, dataHook] = await Promise.all([
     readFile(new URL("index.html", root), "utf8"),
-    readFile(new URL("assets/admin-ta-v11.js", root), "utf8"),
-    readFile(new URL("assets/dashboard-ta-v11.js", root), "utf8"),
-    readFile(new URL("assets/logos-ta-v11.js", root), "utf8")
+    readFile(new URL("assets/admin-ta-v12.js", root), "utf8"),
+    readFile(new URL("assets/dashboard-ta-v12.js", root), "utf8"),
+    readFile(new URL("assets/logos-ta-v12.js", root), "utf8")
   ]);
 
-  assert.ok(html.includes("/assets/index-ta-v11.js"));
+  assert.ok(html.includes("/assets/index-ta-v12.js"));
   assert.ok(admin.includes("Ya está aquí"));
   assert.ok(admin.includes("Llamar a pista"));
   assert.ok(admin.includes("Volver a fila virtual"));

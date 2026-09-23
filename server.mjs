@@ -5,6 +5,7 @@ import { extname, join, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
 import { isSensitiveActionPasswordValid } from "./netlify/lib/auth.mjs";
 import { transitionParticipantStatus } from "./netlify/lib/domain.mjs";
+import { getDailyRank } from "./assets/daily-ranking.js";
 
 const root = fileURLToPath(new URL(".", import.meta.url));
 const port = Number(process.env.PORT || 4173);
@@ -515,6 +516,15 @@ async function handleApi(req, res, url) {
         timeMs
       };
       participants.push(participant);
+      if (isStaff && timeMs !== null) {
+        const daily = getDailyRank(participants, participant.id, now);
+        return sendJson(res, 200, {
+          ...participant,
+          dailyRank: daily.rank,
+          inDailyTopTen: daily.inTopTen,
+          dailyTimesCount: daily.total
+        });
+      }
       return sendJson(res, 200, isStaff ? participant : publicParticipant(participant));
     }
   }
@@ -531,6 +541,7 @@ async function handleApi(req, res, url) {
     if (req.method === "PUT") {
       if (!requireStaff(req, res)) return;
       const body = await readBody(req);
+      const updatedAt = Date.now();
       participants = participants.map((p) => {
         if (p.id !== id) return p;
         const statusTransition = transitionParticipantStatus(p, body.action);
@@ -549,9 +560,19 @@ async function handleApi(req, res, url) {
           contact,
           timeMs,
           status: timeMs === null ? p.status : "finished",
-          updatedAt: Date.now()
+          updatedAt
         };
       });
+      const timeMs = parseTimeMs(body.time);
+      if (timeMs !== null) {
+        const daily = getDailyRank(participants, id, updatedAt);
+        return sendJson(res, 200, {
+          ok: true,
+          dailyRank: daily.rank,
+          inDailyTopTen: daily.inTopTen,
+          dailyTimesCount: daily.total
+        });
+      }
       return sendJson(res, 200, { ok: true });
     }
   }

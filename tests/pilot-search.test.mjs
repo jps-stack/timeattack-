@@ -30,10 +30,10 @@ test("la búsqueda combina nombre, escudería, socio y contacto", () => {
 test("el bundle activo de Staff incluye el buscador", async () => {
   const [html, admin] = await Promise.all([
     readFile(new URL("index.html", root), "utf8"),
-    readFile(new URL("assets/admin-ta-v11.js", root), "utf8")
+    readFile(new URL("assets/admin-ta-v12.js", root), "utf8")
   ]);
 
-  assert.ok(html.includes("/assets/index-ta-v11.js"));
+  assert.ok(html.includes("/assets/index-ta-v12.js"));
   assert.ok(admin.includes("staff-pilot-search"));
   assert.ok(admin.includes("Nombre, escudería, socio o contacto"));
   assert.ok(admin.includes("matchesPilotSearch"));
